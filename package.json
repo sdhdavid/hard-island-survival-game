@@ -1,0 +1,13 @@
+{
+  "name": "after-the-storm",
+  "version": "1.0.0",
+  "description": "אחרי הסערה — משחק הישרדות וחקירה דו־ממדי בדפדפן",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8123",
+    "test": "node tests/playthrough.js && node tests/systems.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
