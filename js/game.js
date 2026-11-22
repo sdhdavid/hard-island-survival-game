@@ -1066,7 +1066,8 @@
     const k = I.smooth(1.5, 12, E.t);
     r.x = I.lerp(1240, 1330, k); r.y = I.lerp(2160, 1975, k);
     r.beam = -Math.PI / 2 + Math.sin(E.t * 0.6) * 0.5 + (E.t > 9 ? (Math.atan2(p.y - r.y, p.x - r.x) + Math.PI / 2) * I.smooth(9, 12, E.t) : 0);
-    G.camTarget = { x: I.lerp(p.x, p.x * 0.45 + r.x * 0.55, I.smooth(0, 5, E.t)), y: I.lerp(p.y, p.y * 0.42 + r.y * 0.58, I.smooth(0, 5, E.t)), z: 0.72 };
+    const f3 = I.render.is3D ? 0.72 : 0.58;
+    G.camTarget = { x: I.lerp(p.x, p.x * (1 - f3) + r.x * f3, I.smooth(0, 5, E.t)), y: I.lerp(p.y, p.y * (1 - f3) + r.y * f3, I.smooth(0, 5, E.t)), z: I.render.is3D ? 0.6 : 0.72 };
     if (E.t > 6.5 && !E.horn) { E.horn = true; I.audio.horn(); }
     if (E.t > 9 && !E.waved) { E.waved = true; G.think('אורות! מעבר לשונית — סירת חילוץ. הם ראו אותי.', 6); I.audio.chord(true); }
     if (E.t > 15 && !E.shown) { E.shown = true; G.timeScale = 1; S.flags.rescued = true; I.ui.showEnd(); }

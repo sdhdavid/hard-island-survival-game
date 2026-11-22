@@ -451,7 +451,7 @@ function streamMesh(U) {
 const K = 'assets/models/kenney/';
 const CAT = {
   tree: ['nature/tree_default', 'nature/tree_oak', 'nature/tree_detailed', 'nature/tree_fat', 'nature/tree_default_dark', 'nature/tree_oak_dark'],
-  palm: ['pirate/palm-detailed-bend', 'pirate/palm-detailed-straight', 'pirate/palm-detailed-bend', 'pirate/palm-bend'],
+  palm: ['pirate/palm-detailed-bend', 'pirate/palm-detailed-straight', 'pirate/palm-detailed-bend'],
   bush: ['nature/plant_bush', 'nature/plant_bushLarge', 'nature/plant_bushDetailed'],
   berry: ['nature/plant_bushDetailed'],
   rock: ['nature/rock_largeA', 'nature/rock_largeB', 'nature/rock_largeC', 'nature/rock_largeD', 'nature/rock_largeE', 'nature/rock_largeF'],
