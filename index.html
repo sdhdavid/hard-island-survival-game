@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>אחרי הסערה</title>
-<meta name="description" content="משחק הישרדות וחקירה דו־ממדי בדפדפן: התעוררות על חוף אחרי סערה, אי לחקור, גאות ושפל, מערה, ומכשיר קשר שצריך לתקן.">
+<meta name="description" content="משחק הישרדות וחקירה תלת־ממדי בדפדפן: התעוררות על חוף אחרי סערה, אי לחקור, גאות ושפל, מערה, ומכשיר קשר שצריך לתקן.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Heebo:wght@300;400;500;700;800&family=Karantina:wght@400;700&display=swap" rel="stylesheet">
@@ -68,6 +68,7 @@
       <button id="bHelp" class="link">איך משחקים?</button>
     </div>
     <p class="tiny">מומלץ עם אוזניות · המשחק נשמר כשנחים ליד מדורה</p>
+    <p class="tiny credit">דגמים: Kenney · KayKit (CC0) · <a href="2d.html">גרסת דו־ממד</a></p>
   </div>
 </div>
 
@@ -79,10 +80,10 @@
 <script src="js/water.js"></script>
 <script src="js/cave.js"></script>
 <script src="js/audio.js"></script>
-<script src="js/render.js"></script>
 <script src="js/game.js"></script>
 <script src="js/ui.js"></script>
-<script src="js/title.js"></script>
 <script src="js/main.js"></script>
+<script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js", "three/addons/": "./vendor/three/addons/" } }</script>
+<script type="module" src="js3d/render3d.js"></script>
 </body>
 </html>

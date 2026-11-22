@@ -1,5 +1,7 @@
 // Shared Playwright helpers for driving the game through its debug API.
 const BASE = process.env.GAME_URL || 'http://localhost:8123/index.html';
+// software WebGL so the 3D version runs in headless Chromium too
+const launchOpts = { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] };
 async function boot(page) {
   await page.goto(BASE);
   await page.waitForFunction(() => window.__ready, null, { timeout: 90000 });
@@ -34,4 +36,4 @@ async function act(page, key = 'E') {
   return page.evaluate(k => { const G = I.game; G.promptT = 0; G.debug.step(0.1); const title = G.prompt && G.prompt.info.title; const ok = G.doAction(k); return { ok, title }; }, key);
 }
 async function state(page) { return page.evaluate(() => JSON.parse(JSON.stringify({ inv: I.game.state.inv, flags: I.game.state.flags, stats: I.game.state.stats, time: I.game.state.time, map: I.game.state.map, pos: I.game.debug.pos(), bottle: I.game.state.bottle }))); }
-module.exports = { BASE, boot, walk, goto, step, act, state };
+module.exports = { BASE, launchOpts, boot, walk, goto, step, act, state };

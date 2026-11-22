@@ -282,3 +282,6 @@ body.touch #thought { bottom: 180px; }
 #panel.end .estats div { background: rgba(255,255,255,.08); }
 #panel.end .btn { color: #fbf3e2; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.15); }
 #panel.end .btn.primary { color: #2b1c10; }
+
+.credit a { color: #fff; }
+#title .credit { margin-top: 4px; opacity: .85; }

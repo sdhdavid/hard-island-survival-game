@@ -600,7 +600,8 @@
       const k = Math.min(1, dt * 3.5);
       cam.x += (tx - cam.x) * k; cam.y += (ty - cam.y) * k; cam.zoom += (tz - cam.zoom) * Math.min(1, dt * 2);
     }
-    // clamp
+    // clamp (the 3D camera frames the scene itself)
+    if (I.render.is3D) return;
     const [W, H] = I.render.size();
     const vw = W / cam.zoom / 2, vh = H / cam.zoom / 2;
     const MW = S.map === 'cave' ? I.cave.W : I.world.W, MH = S.map === 'cave' ? I.cave.H : I.world.H;

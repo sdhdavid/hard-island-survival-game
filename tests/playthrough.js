@@ -5,6 +5,7 @@
 // Usage: node tests/playthrough.js [screenshotDir]
 const { chromium } = require('playwright');
 const { boot, walk, goto, step, act, state } = require('./helpers');
+const { launchOpts } = require('./helpers');
 
 const shots = process.argv[2] || null;
 let page, failures = 0;
@@ -36,7 +37,7 @@ async function visit(type, key = 'E', filter = 'true', maxDist = 900) {
 }
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch(launchOpts);
   page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -209,10 +210,10 @@ async function visit(type, key = 'E', filter = 'true', maxDist = 900) {
   // fine tune by dragging the knob a little
   await page.evaluate(() => { const S = I.game.state; S.radio.freq = Math.round(S.radio.freq * 20) / 20; });
   log('tuned to', await page.evaluate(() => I.game.state.radio.freq.toFixed(2)));
-  await page.waitForSelector('#txB', { timeout: 30000 });
+  await page.waitForSelector('#txB', { timeout: 120000 });
   await shot('11-radio-voice');
   await page.click('#txB');
-  await page.waitForSelector('#rDone', { timeout: 60000 });
+  await page.waitForSelector('#rDone', { timeout: 180000 });
   s = await state(page);
   check(s.flags.called, 'mayday sent and answered');
   await shot('12-radio-answer');

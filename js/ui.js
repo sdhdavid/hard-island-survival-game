@@ -495,7 +495,7 @@
   function radioLoop(now) {
     if (U.open !== 'radio') return;
     const g = G(), S = g.state, F = S.flags, R = S.radio;
-    const dt = Math.min(0.1, (now - rLast) / 1000); rLast = now;
+    const dt = Math.min(0.5, (now - rLast) / 1000); rLast = now;
     if (g.keys.ArrowLeft || g.keys.KeyA) tune(dt * 0.7 * ((g.keys.ShiftLeft) ? 0.25 : 1));
     if (g.keys.ArrowRight || g.keys.KeyD) tune(-dt * 0.7 * ((g.keys.ShiftLeft) ? 0.25 : 1));
     drawDial(); drawKnob();

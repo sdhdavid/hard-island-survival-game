@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>אחרי הסערה</title>
+<meta name="description" content="משחק הישרדות וחקירה דו־ממדי בדפדפן: התעוררות על חוף אחרי סערה, אי לחקור, גאות ושפל, מערה, ומכשיר קשר שצריך לתקן.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Heebo:wght@300;400;500;700;800&family=Karantina:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+<canvas id="titleCv"></canvas>
+
+<div id="hud" class="hidden">
+  <div id="topR">
+    <div id="stats">
+      <div class="stat" id="st-water" title="מים"><svg viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/><circle class="fg" cx="22" cy="22" r="18"/></svg>
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 3c3 4.5 6 8 6 11a6 6 0 0 1-12 0c0-3 3-6.5 6-11z"/></svg></div>
+      <div class="stat" id="st-food" title="אוכל"><svg viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/><circle class="fg" cx="22" cy="22" r="18"/></svg>
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 7c-1-3 1-5 3-5-0.5 2-1.5 3.5-3 5zm-4 1c2-1 3 0 4 0s2-1 4 0c3 1.5 3 6 1 10-1.5 3-3.5 4-5 3-1.5 1-3.5 0-5-3-2-4-2-8.5 1-10z"/></svg></div>
+      <div class="stat" id="st-energy" title="אנרגיה"><svg viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/><circle class="fg" cx="22" cy="22" r="18"/></svg>
+        <svg class="ico" viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 8-11h-6z"/></svg></div>
+      <div class="stat hidden" id="st-vigor" title="כוח"><svg viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="18"/><circle class="fg" cx="22" cy="22" r="18"/></svg>
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.2-9.4C1.6 8.1 3.6 4.8 7 4.8c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.4 3.3 4.2 6.8C19.5 16.4 12 21 12 21z"/></svg></div>
+    </div>
+    <div id="objective"></div>
+  </div>
+  <div id="topL">
+    <canvas id="clockCv" width="168" height="104"></canvas>
+    <div id="clockTxt"></div>
+    <div id="tideTxt" class="hidden"></div>
+  </div>
+  <div id="thought"></div>
+  <div id="toasts"></div>
+  <div id="prompt" class="hidden"></div>
+  <div id="bar"><div id="inv"></div></div>
+  <div id="tools">
+    <button class="tbtn" id="btnNote" title="מחברת (N)"><span>N</span><svg viewBox="0 0 24 24"><path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6zM4 6h3M4 10h3M4 14h3M4 18h3"/></svg></button>
+    <button class="tbtn" id="btnCraft" title="יצירה (C)"><span>C</span><svg viewBox="0 0 24 24"><path d="M14 4l6 6-3 3-6-6zM11 7 3 15v6h6l8-8"/></svg></button>
+    <button class="tbtn" id="btnWait" title="לחכות — החזק T"><span>T</span><svg viewBox="0 0 24 24"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9"/></svg></button>
+    <button class="tbtn" id="btnPause" title="תפריט (Esc)"><span>Esc</span><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+  <div id="hint" class="hidden">
+    <div><b>WASD / חצים</b> תנועה · <b>Shift</b> ריצה</div>
+    <div><b>E</b> פעולה · <b>R</b> פעולה שנייה · <b>C</b> יצירה · <b>N</b> מחברת</div>
+    <div><b>T</b> (החזק) לחכות · <b>1–9</b> שימוש בחפץ · <b>Esc</b> תפריט</div>
+  </div>
+  <div id="waitBadge" class="hidden">⌛ הזמן חולף...</div>
+  <div id="touch" class="hidden">
+    <div id="joy"><div id="joyKnob"></div></div>
+    <button id="tA">E</button>
+    <button id="tB">R</button>
+  </div>
+</div>
+
+<div id="modal" class="hidden"><div id="panel"></div></div>
+
+<div id="title" class="hidden">
+  <div class="tinner">
+    <h1>אחרי הסערה</h1>
+    <p class="sub">משחק הישרדות וחקירה על אי קטן</p>
+    <div class="tbtns">
+      <button id="bNew" class="big">להתעורר</button>
+      <button id="bLoad" class="big alt hidden">להמשיך</button>
+      <button id="bHelp" class="link">איך משחקים?</button>
+    </div>
+    <p class="tiny">מומלץ עם אוזניות · המשחק נשמר כשנחים ליד מדורה</p>
+    <p class="tiny credit"><a href="index.html">לגרסת התלת־ממד</a></p>
+  </div>
+</div>
+
+<div id="loading"><div class="lt">אחרי הסערה</div><div class="lbar"><div id="lfill"></div></div><div id="lmsg">מצייר את האי...</div></div>
+
+<script src="js/core.js"></script>
+<script src="js/world.js"></script>
+<script src="js/terrain.js"></script>
+<script src="js/water.js"></script>
+<script src="js/cave.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/render.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/title.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

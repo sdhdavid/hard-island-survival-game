@@ -79,6 +79,77 @@
     return cave.dist[gy * GW + gx] * CC;
   };
 
+  function drawPaintings(x, R, only) {
+    // ---- paintings (ochre & charcoal on the walls)
+    const ochre = 'rgba(176,64,34,0.85)', soot = 'rgba(25,18,14,0.8)', chalk = 'rgba(240,236,220,0.9)';
+    const P = {};
+    cave.PAINTINGS.forEach(p => P[p.id] = p);
+    // hands
+    if (!only || only === 'hands') (function () {
+      const p = P.hands;
+      for (let k = 0; k < 11; k++) {
+        const hx = p.x - 55 + k * 11 + R() * 4, hy = p.y - 14 + Math.sin(k) * 9, s = 0.6 + R() * 0.5;
+        x.save(); x.translate(hx, hy); x.rotate((R() - 0.5) * 0.6); x.scale(s, s);
+        x.fillStyle = k % 3 === 0 ? soot : ochre;
+        x.beginPath(); x.ellipse(0, 4, 5, 6, 0, 0, I.TAU); x.fill();
+        for (let f = 0; f < 5; f++) { const a = -2.4 + f * 0.42; x.beginPath(); x.ellipse(Math.cos(a) * 7, 2 + Math.sin(a) * 8, 1.4, 3.4, a + Math.PI / 2, 0, I.TAU); x.fill(); }
+        x.restore();
+      }
+    })();
+    // tide
+    if (!only || only === 'tide') (function () {
+      const p = P.tide;
+      [[-26, 1], [26, 0]].forEach(([ox, low]) => {
+        const cx = p.x + ox, cy = p.y - 6;
+        x.strokeStyle = ochre; x.lineWidth = 2;
+        x.beginPath(); x.arc(cx, cy - 16, 6, 0.6, Math.PI * 2 - 0.6); x.stroke();
+        x.fillStyle = soot; x.beginPath(); x.arc(cx, cy + 12, 8, Math.PI, 0); x.fill();
+        x.strokeStyle = ochre; x.lineWidth = 1.6;
+        const wy = low ? cy + 14 : cy + 2;
+        for (let r2 = 0; r2 < 2; r2++) {
+          x.beginPath();
+          for (let s = -14; s <= 14; s += 2) x.lineTo(cx + s, wy + r2 * 4 + Math.sin(s * 0.6) * 1.6);
+          x.stroke();
+        }
+      });
+    })();
+    // canoe
+    if (!only || only === 'canoe') (function () {
+      const p = P.canoe;
+      x.strokeStyle = ochre; x.lineWidth = 3;
+      x.beginPath(); x.moveTo(p.x - 50, p.y - 4); x.quadraticCurveTo(p.x, p.y + 14, p.x + 50, p.y - 6); x.stroke();
+      for (let k = 0; k < 8; k++) {
+        const px = p.x - 35 + k * 10;
+        x.fillStyle = soot; x.beginPath(); x.arc(px, p.y - 6, 2.2, 0, I.TAU); x.fill();
+        x.strokeStyle = soot; x.lineWidth = 1.2; x.beginPath(); x.moveTo(px, p.y - 4); x.lineTo(px - 6, p.y + 10); x.stroke();
+      }
+      x.fillStyle = ochre;
+      [[-60, 22], [40, 24], [-10, 30]].forEach(([ox, oy]) => {
+        x.beginPath(); x.ellipse(p.x + ox, p.y + oy, 10, 4, 0, 0, I.TAU); x.fill();
+        x.beginPath(); x.moveTo(p.x + ox + 9, p.y + oy); x.lineTo(p.x + ox + 15, p.y + oy - 4); x.lineTo(p.x + ox + 15, p.y + oy + 4); x.fill();
+      });
+    })();
+    // island map
+    if (!only || only === 'map') (function () {
+      const p = P.map;
+      x.strokeStyle = ochre; x.lineWidth = 2;
+      x.beginPath();
+      for (let k = 0; k <= 24; k++) { const a = k / 24 * I.TAU, rr = 26 + Math.sin(a * 3) * 4; x.lineTo(p.x + Math.cos(a) * rr * 1.2, p.y + Math.sin(a) * rr * 0.8); }
+      x.stroke();
+      x.fillStyle = soot; x.beginPath(); x.moveTo(p.x + 8, p.y - 2); x.lineTo(p.x + 16, p.y - 16); x.lineTo(p.x + 24, p.y - 2); x.fill();
+      x.strokeStyle = 'rgba(60,110,160,0.8)'; x.beginPath(); x.moveTo(p.x - 6, p.y - 6); x.quadraticCurveTo(p.x - 2, p.y + 8, p.x + 2, p.y + 20); x.stroke();
+      x.strokeStyle = chalk; x.lineWidth = 1.6; x.beginPath(); x.moveTo(p.x + 16, p.y - 16); x.lineTo(p.x + 16, p.y - 30); x.stroke();
+      x.fillStyle = chalk; x.font = 'bold 7px Heebo, Arial'; x.textAlign = 'center'; x.fillText('המגדל', p.x + 16, p.y - 33);
+    })();
+  }
+  // a single painting on a transparent canvas, centred on its position (for the 3D cave walls)
+  cave.paintingCanvas = function (id, w = 170, h = 110) {
+    const p = cave.PAINTINGS.find(q => q.id === id);
+    const c = document.createElement('canvas'); c.width = w * 2; c.height = h * 2;
+    const x = c.getContext('2d'); x.scale(2, 2); x.translate(w / 2 - p.x, h / 2 - p.y);
+    drawPaintings(x, I.rng(55), id);
+    return c;
+  };
   function paint() {
     const c = document.createElement('canvas'); c.width = CW; c.height = CH;
     const x = c.getContext('2d');
@@ -146,67 +217,8 @@
         x.beginPath(); x.arc(px, py, 0.8 + R() * 1.6, 0, I.TAU); x.fill();
       }
     }
-    // ---- paintings (ochre & charcoal on the walls)
-    const ochre = 'rgba(176,64,34,0.85)', soot = 'rgba(25,18,14,0.8)', chalk = 'rgba(240,236,220,0.9)';
-    const P = {};
-    cave.PAINTINGS.forEach(p => P[p.id] = p);
-    // hands
-    (function () {
-      const p = P.hands;
-      for (let k = 0; k < 11; k++) {
-        const hx = p.x - 55 + k * 11 + R() * 4, hy = p.y - 14 + Math.sin(k) * 9, s = 0.6 + R() * 0.5;
-        x.save(); x.translate(hx, hy); x.rotate((R() - 0.5) * 0.6); x.scale(s, s);
-        x.fillStyle = k % 3 === 0 ? soot : ochre;
-        x.beginPath(); x.ellipse(0, 4, 5, 6, 0, 0, I.TAU); x.fill();
-        for (let f = 0; f < 5; f++) { const a = -2.4 + f * 0.42; x.beginPath(); x.ellipse(Math.cos(a) * 7, 2 + Math.sin(a) * 8, 1.4, 3.4, a + Math.PI / 2, 0, I.TAU); x.fill(); }
-        x.restore();
-      }
-    })();
-    // tide
-    (function () {
-      const p = P.tide;
-      [[-26, 1], [26, 0]].forEach(([ox, low]) => {
-        const cx = p.x + ox, cy = p.y - 6;
-        x.strokeStyle = ochre; x.lineWidth = 2;
-        x.beginPath(); x.arc(cx, cy - 16, 6, 0.6, Math.PI * 2 - 0.6); x.stroke();
-        x.fillStyle = soot; x.beginPath(); x.arc(cx, cy + 12, 8, Math.PI, 0); x.fill();
-        x.strokeStyle = ochre; x.lineWidth = 1.6;
-        const wy = low ? cy + 14 : cy + 2;
-        for (let r2 = 0; r2 < 2; r2++) {
-          x.beginPath();
-          for (let s = -14; s <= 14; s += 2) x.lineTo(cx + s, wy + r2 * 4 + Math.sin(s * 0.6) * 1.6);
-          x.stroke();
-        }
-      });
-    })();
-    // canoe
-    (function () {
-      const p = P.canoe;
-      x.strokeStyle = ochre; x.lineWidth = 3;
-      x.beginPath(); x.moveTo(p.x - 50, p.y - 4); x.quadraticCurveTo(p.x, p.y + 14, p.x + 50, p.y - 6); x.stroke();
-      for (let k = 0; k < 8; k++) {
-        const px = p.x - 35 + k * 10;
-        x.fillStyle = soot; x.beginPath(); x.arc(px, p.y - 6, 2.2, 0, I.TAU); x.fill();
-        x.strokeStyle = soot; x.lineWidth = 1.2; x.beginPath(); x.moveTo(px, p.y - 4); x.lineTo(px - 6, p.y + 10); x.stroke();
-      }
-      x.fillStyle = ochre;
-      [[-60, 22], [40, 24], [-10, 30]].forEach(([ox, oy]) => {
-        x.beginPath(); x.ellipse(p.x + ox, p.y + oy, 10, 4, 0, 0, I.TAU); x.fill();
-        x.beginPath(); x.moveTo(p.x + ox + 9, p.y + oy); x.lineTo(p.x + ox + 15, p.y + oy - 4); x.lineTo(p.x + ox + 15, p.y + oy + 4); x.fill();
-      });
-    })();
-    // island map
-    (function () {
-      const p = P.map;
-      x.strokeStyle = ochre; x.lineWidth = 2;
-      x.beginPath();
-      for (let k = 0; k <= 24; k++) { const a = k / 24 * I.TAU, rr = 26 + Math.sin(a * 3) * 4; x.lineTo(p.x + Math.cos(a) * rr * 1.2, p.y + Math.sin(a) * rr * 0.8); }
-      x.stroke();
-      x.fillStyle = soot; x.beginPath(); x.moveTo(p.x + 8, p.y - 2); x.lineTo(p.x + 16, p.y - 16); x.lineTo(p.x + 24, p.y - 2); x.fill();
-      x.strokeStyle = 'rgba(60,110,160,0.8)'; x.beginPath(); x.moveTo(p.x - 6, p.y - 6); x.quadraticCurveTo(p.x - 2, p.y + 8, p.x + 2, p.y + 20); x.stroke();
-      x.strokeStyle = chalk; x.lineWidth = 1.6; x.beginPath(); x.moveTo(p.x + 16, p.y - 16); x.lineTo(p.x + 16, p.y - 30); x.stroke();
-      x.fillStyle = chalk; x.font = 'bold 7px Heebo, Arial'; x.textAlign = 'center'; x.fillText('המגדל', p.x + 16, p.y - 33);
-    })();
+    drawPaintings(x, R);
+    const chalk = 'rgba(240,236,220,0.9)';
     // chalk waymarks
     cave.MARKS.forEach(m => {
       x.save(); x.translate(m.x, m.y); x.rotate(m.a);

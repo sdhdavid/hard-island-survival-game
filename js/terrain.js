@@ -444,6 +444,7 @@
 
   // ---------------- icons ----------------
   T.icons = {};
+  T.buildIcons = () => buildIcons();
   function icon(id, fn) {
     const c = document.createElement('canvas'); c.width = c.height = 64;
     const x = c.getContext('2d'); x.lineCap = 'round'; x.lineJoin = 'round';

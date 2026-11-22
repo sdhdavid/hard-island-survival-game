@@ -2,10 +2,11 @@
 // fainting returns you to camp, crabs hide, the tide uncovers mussels, waiting (T).
 const { chromium } = require('playwright');
 const { boot, goto, step, act, state } = require('./helpers');
+const { launchOpts } = require('./helpers');
 let failures = 0;
 function check(c, m) { console.log(c ? '  ✓' : '  ✗', m); if (!c) failures++; }
 (async () => {
-  const b = await chromium.launch(); const page = await b.newPage({ viewport: { width: 1280, height: 720 } });
+  const b = await chromium.launch(launchOpts); const page = await b.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = []; page.on('pageerror', e => errors.push(e.message));
   await boot(page);
   await page.evaluate(() => localStorage.clear());

@@ -7,22 +7,6 @@
   let cv, ctx, lightCv, lctx, cloudSpr, glowSpr;
   Rr.particles = [];
 
-  // ---------- sky & light ----------
-  const KEYS = [[0, [0.15, 0.19, 0.36]], [4.6, [0.16, 0.2, 0.38]], [5.5, [0.42, 0.37, 0.52]], [6.3, [0.98, 0.72, 0.58]], [7.3, [1, 0.93, 0.83]],
-    [8.6, [1, 1, 0.98]], [15.8, [1, 0.98, 0.93]], [17.4, [1, 0.87, 0.68]], [18.5, [0.98, 0.63, 0.46]], [19.3, [0.6, 0.4, 0.55]], [20.2, [0.21, 0.23, 0.42]], [24, [0.15, 0.19, 0.36]]];
-  I.sky = function (time, overcast) {
-    const t = ((time % 24) + 24) % 24;
-    let k = 0; while (k < KEYS.length - 2 && t > KEYS[k + 1][0]) k++;
-    const a = KEYS[k], b = KEYS[k + 1];
-    let c = I.mix3(a[1], b[1], (t - a[0]) / (b[0] - a[0]));
-    if (overcast > 0) c = I.mix3(c, [0.72, 0.76, 0.82], overcast * 0.7);
-    const day = I.smooth(5.2, 7, t) * (1 - I.smooth(18.3, 20.2, t));
-    const night = 1 - I.smooth(4.8, 6.2, t) + I.smooth(19.2, 20.6, t);
-    const sunA = I.clamp((t - 6) / 13, 0, 1) * Math.PI; // 0 east .. PI west
-    const dusk = Math.max(I.smooth(16.8, 18.6, t) * (1 - I.smooth(19.2, 20.4, t)), I.smooth(5, 6.2, t) * (1 - I.smooth(6.8, 8, t)));
-    return { amb: c, day, night: I.clamp(night, 0, 1), sunDir: [-Math.cos(sunA), 0.45 + 0.2 * (1 - Math.sin(sunA))], shadowLen: 0.35 + 0.9 * (1 - Math.sin(sunA)), dusk };
-  };
-
   Rr.init = function (canvas) {
     cv = canvas; ctx = cv.getContext('2d');
     lightCv = document.createElement('canvas'); lctx = lightCv.getContext('2d');

@@ -17,7 +17,8 @@
     await tick();
     I.cave.generate();
     prog(0.15, 'צובע חול, סלע ודשא...');
-    await I.terrain.build(v => prog(v));
+    if (I.render.is3D) { I.terrain.buildIcons(); await I.render.load(v => prog(v)); }
+    else await I.terrain.build(v => prog(v));
     prog(0.96, 'משרטט מפה...');
     await tick();
     I.ui.buildMap();
@@ -64,7 +65,7 @@
       else G.clock += dt;
       I.render.frame(G, dt);
       I.ui.update(dt);
-    }
+    } else if (I.render.titleFrame && I.title.on) I.render.titleFrame(dt);
     requestAnimationFrame(loop);
   }
 
@@ -98,10 +99,12 @@
     addEventListener('keyup', e => { G.keys[e.code] = false; if (e.code === 'KeyT') G.waiting = false; });
     addEventListener('blur', () => { G.keys = {}; G.waiting = false; });
     const cv = $('game');
+    if (I.render.onWheel) cv.addEventListener('wheel', e => { e.preventDefault(); I.render.onWheel(e.deltaY); }, { passive: false });
     cv.addEventListener('pointerdown', e => {
       if (!G.running || I.ui.open || G.busy || e.pointerType === 'touch') return;
-      const [W, H] = I.render.size(), k = W / innerWidth;
-      const wx = (e.clientX * k - W / 2) / G.cam.zoom + G.cam.x, wy = (e.clientY * k - H / 2) / G.cam.zoom + G.cam.y;
+      let wx, wy;
+      if (I.render.screenToWorld) { const hit = I.render.screenToWorld(e.clientX, e.clientY); if (!hit) return; [wx, wy] = hit; }
+      else { const [W, H] = I.render.size(), k = W / innerWidth; wx = (e.clientX * k - W / 2) / G.cam.zoom + G.cam.x; wy = (e.clientY * k - H / 2) / G.cam.zoom + G.cam.y; }
       if (!G.goTo(wx, wy, 6)) G.target = [wx, wy];
     });
     // touch controls
