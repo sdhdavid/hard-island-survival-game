@@ -382,6 +382,19 @@
       add(kind, x, y, { r: 0, seed: R() * 1000, size: 6 + R() * 7 });
       cnt++;
     }
+    // ---- reeds & cattails along the stream, the spring and quiet water
+    tries = 0; cnt = 0;
+    while (cnt < 70 && tries < 6000) {
+      tries++;
+      let x, y;
+      if (R() < 0.75) { const p = STREAM[Math.floor(R() * (STREAM.length - 12))]; const a = R() * I.TAU; x = p[0] + Math.cos(a) * (13 + R() * 6); y = p[1] + Math.sin(a) * (11 + R() * 5); }
+      else { const a = R() * I.TAU; x = world.SPRING.x + Math.cos(a) * 40; y = world.SPRING.y + Math.sin(a) * 31; }
+      const i = world.idx(x, y);
+      if (h[i] < 7 || pathD[i] < 10 || streamD[i] < 9) continue;
+      if (!ok(x, y, 9)) continue;
+      add('reed', x, y, { r: 0, seed: R() * 100, size: 12 + R() * 7 });
+      reserve(x, y, 7); cnt++;
+    }
     // ---- driftwood on beaches
     const beachWood = [[860, 1702], [1180, 1722], [1290, 1735], [760, 1680], [1440, 1716], [1520, 1690], [690, 1640], [1000, 1736], [1600, 1650], [590, 1560]];
     beachWood.forEach((p, k) => add('drift', p[0], p[1], { r: 0, reach: 22, angle: R() * 3, len: 16 + R() * 12, beach: true, wid: k }));

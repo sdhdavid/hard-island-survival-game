@@ -158,7 +158,7 @@
   function drawOutside(G, view, sky, dt) {
     const S = G.state, cam = G.cam, w = I.world, K = Rr.skip;
     let t0 = performance.now();
-    ctx.fillStyle = '#103866'; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = '#2278b4'; ctx.fillRect(0, 0, cv.width, cv.height);
     worldTransform(cam);
     // terrain
     const sx = Math.max(0, Math.floor(view.x0) - 2), sy = Math.max(0, Math.floor(view.y0) - 2);
@@ -184,7 +184,7 @@
     const list = vis.filter(inView);
     // shadows
     if (sky.day > 0.05 && !K.shadows) {
-      const sa = 0.22 * sky.day * (1 - G.overcast * 0.8);
+      const sa = 0.26 * sky.day * (1 - G.overcast * 0.8);
       const sd = sky.sunDir, sl = sky.shadowLen;
       ctx.globalAlpha = sa;
       for (const o of list) drawShadow(o, sd, sl, G);
@@ -373,6 +373,11 @@
   function isFlat(o) { return FLAT[o.type] === 1; }
   function os(G, o) { return G.state.objState[o.id] || {}; }
 
+  // blurred shadow sprites carry padding around the silhouette
+  function shd(spr, x, y, w, h) {
+    const pf = (spr.pad || 0) / (spr.width - 2 * (spr.pad || 0));
+    ctx.drawImage(spr, x - w * pf, y - h * pf, w * (1 + 2 * pf), h * (1 + 2 * pf));
+  }
   function drawShadow(o, sd, sl, G) {
     const T = I.terrain, t = G.clock, wind = G.wind;
     const sway = Math.sin(t * 1.1 + (o.seed || o.x * 0.01)) * wind;
@@ -380,17 +385,17 @@
       const s = o.size, spr = o.type === 'fig' ? T.figShadow : T.canopyShadow[Math.floor(o.seed) % 8];
       const h = s * 0.9 * sl;
       const cx = o.x + sd[0] * h + sway * 2.5, cy = o.y + sd[1] * h * 0.6 + 4;
-      ctx.drawImage(spr, cx - s * 1.2, cy - s * 0.9, s * 2.4, s * 1.9);
+      shd(spr, cx - s * 1.2, cy - s * 0.9, s * 2.4, s * 1.9);
     } else if (o.type === 'palm') {
       const h = o.hgt * sl, k = Math.floor(o.seed) % 5;
       const tx = o.x + o.lean * o.hgt * 0.45 + sd[0] * h, ty = o.y + sd[1] * h * 0.55 + 3;
       ctx.strokeStyle = '#000'; ctx.lineWidth = 3.2;
       ctx.beginPath(); ctx.moveTo(o.x, o.y); ctx.lineTo(tx, ty); ctx.stroke();
       const r = 30 * 1.3;
-      ctx.drawImage(T.palmShadow[k], tx - r + sway * 3, ty - r * 0.75, r * 2, r * 1.5);
+      shd(T.palmShadow[k], tx - r + sway * 3, ty - r * 0.75, r * 2, r * 1.5);
     } else if (o.type === 'bush' || o.type === 'berry') {
       const s = o.size || 13;
-      ctx.drawImage(T.bushShadow[Math.floor(o.seed || 1) % 6], o.x - s * 1.1 + sd[0] * s * 0.5, o.y - s * 0.5 + sd[1] * s * 0.3, s * 2.4, s * 1.6);
+      shd(T.bushShadow[Math.floor(o.seed || 1) % 6], o.x - s * 1.1 + sd[0] * s * 0.5, o.y - s * 0.5 + sd[1] * s * 0.3, s * 2.4, s * 1.6);
     } else if (o.type === 'pine') {
       ctx.fillStyle = '#000';
       const h = 70 * sl;
@@ -521,11 +526,11 @@
         const tx = o.x + o.lean * o.hgt * 0.45 + sway * 2.5, ty = o.y - o.hgt;
         const mx = o.x + o.lean * o.hgt * 0.1, my = o.y - o.hgt * 0.5;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = '#6e5a40'; ctx.lineWidth = 5.4;
+        ctx.strokeStyle = '#9a7448'; ctx.lineWidth = 5.4;
         ctx.beginPath(); ctx.moveTo(o.x, o.y); ctx.quadraticCurveTo(mx, my, tx, ty); ctx.stroke();
-        ctx.strokeStyle = '#a28a63'; ctx.lineWidth = 2.6;
+        ctx.strokeStyle = '#cfa874'; ctx.lineWidth = 2.6;
         ctx.beginPath(); ctx.moveTo(o.x - 1, o.y); ctx.quadraticCurveTo(mx - 1, my, tx - 1, ty); ctx.stroke();
-        ctx.strokeStyle = 'rgba(70,55,35,0.55)'; ctx.lineWidth = 0.8;
+        ctx.strokeStyle = 'rgba(120,88,52,0.6)'; ctx.lineWidth = 0.8;
         for (let s = 0.08; s < 0.95; s += 0.075) {
           const it = 1 - s, px = it * it * o.x + 2 * it * s * mx + s * s * tx, py = it * it * o.y + 2 * it * s * my + s * s * ty;
           ctx.beginPath(); ctx.moveTo(px - 2.6, py); ctx.lineTo(px + 2.6, py + 0.6); ctx.stroke();
@@ -544,8 +549,9 @@
       case 'tree': case 'fig': {
         const s = o.size;
         const sway = Math.sin(t * 0.9 + o.seed) * wind;
-        ctx.fillStyle = '#4d3b2a';
-        ctx.beginPath(); ctx.moveTo(o.x - 4, o.y); ctx.lineTo(o.x - 2.5, o.y - s * 0.6); ctx.lineTo(o.x + 2.5, o.y - s * 0.6); ctx.lineTo(o.x + 4, o.y); ctx.fill();
+        ctx.fillStyle = '#7d5636';
+        ctx.beginPath(); ctx.moveTo(o.x - 5.5, o.y + 0.5); ctx.quadraticCurveTo(o.x - 2.2, o.y - 3, o.x - 2.2, o.y - s * 0.62); ctx.lineTo(o.x + 2.2, o.y - s * 0.62); ctx.quadraticCurveTo(o.x + 2.2, o.y - 3, o.x + 5.5, o.y + 0.5); ctx.fill();
+        ctx.fillStyle = '#a27448'; ctx.fillRect(o.x - 1.6, o.y - s * 0.6, 1.3, s * 0.56);
         if (o.type === 'fig') {
           ctx.strokeStyle = '#6a5640'; ctx.lineWidth = 2;
           for (let k = -3; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(o.x + k * 4, o.y - s * 0.45); ctx.quadraticCurveTo(o.x + k * 7, o.y - s * 0.2, o.x + k * 6, o.y + 2); ctx.stroke(); }
@@ -583,7 +589,7 @@
           ctx.save(); ctx.translate(o.x, o.y); ctx.transform(1, 0, sway, 1, 0, 0);
           ctx.drawImage(T.ferns[Math.floor(o.seed) % 6], -s * 1.2, -s * 1.4, s * 2.4, s * 2.4); ctx.restore();
         } else {
-          ctx.strokeStyle = o.type === 'dunegrass' ? '#b6b277' : '#5f9640'; ctx.lineWidth = 0.9;
+          ctx.strokeStyle = o.type === 'dunegrass' ? '#c9c486' : '#7fc457'; ctx.lineWidth = 1.2;
           ctx.beginPath();
           for (let k = 0; k < 6; k++) {
             const a = (k - 2.5) * 0.28, L = s * (0.7 + (k % 3) * 0.15);
@@ -592,6 +598,18 @@
           }
           ctx.stroke();
         }
+        break;
+      }
+      case 'reed': {
+        const sway = Math.sin(t * 1.7 + o.seed) * wind * 1.6;
+        for (let k = 0; k < 4; k++) {
+          const bx = o.x + (k - 1.5) * 2.2, L = o.size * (0.75 + (k % 2) * 0.3), sw = sway * (0.6 + k * 0.15);
+          ctx.strokeStyle = '#6aa447'; ctx.lineWidth = 0.9;
+          ctx.beginPath(); ctx.moveTo(bx, o.y); ctx.quadraticCurveTo(bx + sw * 0.3, o.y - L * 0.5, bx + sw, o.y - L); ctx.stroke();
+          if (k !== 2) { ctx.fillStyle = '#8b5a2e'; ctx.beginPath(); ctx.ellipse(bx + sw * 0.95, o.y - L * 0.86, 1.2, 2.6, sw * 0.04, 0, I.TAU); ctx.fill(); }
+        }
+        ctx.strokeStyle = '#8fc664'; ctx.lineWidth = 1.1;
+        ctx.beginPath(); ctx.moveTo(o.x - 3, o.y); ctx.quadraticCurveTo(o.x - 6, o.y - 5, o.x - 8 + sway, o.y - 8); ctx.moveTo(o.x + 3, o.y); ctx.quadraticCurveTo(o.x + 6, o.y - 6, o.x + 7 + sway, o.y - 10); ctx.stroke();
         break;
       }
       case 'pine': {

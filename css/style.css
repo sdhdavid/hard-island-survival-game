@@ -226,3 +226,59 @@ body.touch #thought { bottom: 180px; }
   #panel { padding: 18px 14px; }
   #panel h2 { font-size: 32px; }
 }
+
+/* ================= cozy cream theme ================= */
+:root {
+  --glass: rgba(255, 249, 236, 0.88);
+  --glass2: rgba(255, 248, 232, 0.96);
+  --line: rgba(130, 95, 55, 0.2);
+  --txt: #4a3523;
+  --dim: rgba(74, 53, 35, 0.62);
+  --accent: #e0862c;
+  --good: #3f8f2a;
+  --bad: #c4462f;
+  --shadow: 0 6px 18px rgba(60, 40, 20, 0.18);
+}
+.stat, #objective, #topL, .toast, #prompt, #inv, .tbtn, #hint, #waitBadge { box-shadow: var(--shadow); border: 1px solid var(--line); }
+.stat circle.bg { stroke: rgba(120, 85, 45, 0.15); }
+.stat .ico { fill: #6b4a2b; }
+.stat.low .ico { fill: #c4462f; }
+#objective .s, #clockTxt { color: var(--dim); }
+#clockTxt { color: var(--txt); }
+#tideTxt { color: #1f7f9a; }
+#prompt .pt { color: #8a4f1e; }
+#prompt kbd, .help kbd { background: #7a4a22; color: #fff6e4; box-shadow: inset 0 -2px 0 rgba(0,0,0,.25); }
+.slot { background: rgba(160, 120, 70, 0.1); border-color: rgba(130, 95, 55, 0.18); }
+.slot:hover { background: rgba(160, 120, 70, 0.22); }
+.slot .n { color: #4a3523; text-shadow: 0 1px 0 #fff8ea; }
+.slot .tip b { color: #8a4f1e; }
+.sips i { background: rgba(120, 85, 45, 0.25); }
+.sips i.f { background: #2fa6c8; }
+.tbtn svg { stroke: #6b4a2b; }
+.tbtn:hover { background: #fff3da; }
+.tbtn.on { background: #f3b866; }
+#hint b { color: var(--txt); }
+#modal { background: rgba(60, 40, 20, 0.28); }
+#panel { color: var(--txt); }
+#panel h2 { color: #8a4f1e; }
+.x { background: rgba(120, 85, 45, 0.12); color: var(--txt); }
+.btn { color: var(--txt); background: rgba(160, 120, 70, 0.1); border-color: rgba(130, 95, 55, 0.22); }
+.btn:hover:not(:disabled) { background: rgba(160, 120, 70, 0.2); }
+.btn.primary { background: linear-gradient(180deg, #ffd89a, #f0a24a); color: #3b2410; }
+.card { background: rgba(255, 255, 255, 0.55); border-color: rgba(130, 95, 55, 0.18); }
+.card .h b { color: #8a4f1e; }
+.card .site { background: rgba(160, 120, 70, 0.1); }
+.card .site b { color: #8a4f1e; }
+.fuel { background: rgba(120, 85, 45, 0.15); }
+/* the radio stays a heavy metal box */
+#panel.radio { color: #e9edf0; }
+#panel.radio h2 { color: #c7cdd2; }
+#panel.radio .x { background: rgba(255,255,255,.12); color: #e9edf0; }
+#panel.radio .btn { color: #e9edf0; background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.14); }
+#panel.radio .btn.primary { color: #2b1c10; background: linear-gradient(180deg, #ffd89a, #f0a24a); }
+/* the ending keeps its dusk colours */
+#panel.end { color: #fbf3e2; }
+#panel.end h2 { color: #ffe8bf; }
+#panel.end .estats div { background: rgba(255,255,255,.08); }
+#panel.end .btn { color: #fbf3e2; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.15); }
+#panel.end .btn.primary { color: #2b1c10; }

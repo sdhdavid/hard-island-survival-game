@@ -68,7 +68,7 @@
     }
     // ---- sea
     g = x.createLinearGradient(0, hz, 0, H);
-    g.addColorStop(0, '#5f8fa3'); g.addColorStop(0.25, '#2f7f95'); g.addColorStop(0.6, '#2aa3ac'); g.addColorStop(1, '#5fd0c4');
+    g.addColorStop(0, '#7fb4c4'); g.addColorStop(0.25, '#3c9fc0'); g.addColorStop(0.6, '#3dbcc6'); g.addColorStop(1, '#86e0d2');
     x.fillStyle = g; x.fillRect(0, hz, W, H - hz);
     // sun glitter
     for (let k = 0; k < 90; k++) {

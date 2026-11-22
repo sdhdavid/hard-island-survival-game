@@ -665,7 +665,7 @@
     const tarp = w.find('tarp');
     if (Math.hypot(x - tarp.x, y - tarp.y) < 90) traits.push({ k: 'shelter', t: 'מחסה מתחת ליריעה — שינה טובה, האש מוגנת' });
     const db = Math.hypot(x - w.BOAT.x, y - w.BOAT.y);
-    traits.push({ k: 'boat', t: db < 600 ? 'קרוב לסירה ולחוף' : 'רחוק מהסירה — הדרך חזרה ארוכה', bad: db >= 600 });
+    traits.push({ k: 'boat', t: db < 1000 ? 'קרוב לסירה ולחוף' : 'רחוק מהסירה — הדרך חזרה ארוכה', bad: db >= 1000 });
     return traits;
   }
   G.fireSite = fireSite;

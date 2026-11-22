@@ -6,7 +6,7 @@
   const Wt = I.water = {};
   const LUT_N = 260, LUT_STEP = 8; // 8 entries per unit depth
   const lut = new Float32Array(LUT_N * 4);
-  const stops = [[0, [210, 245, 238], 0.22], [1.2, [140, 225, 220], 0.42], [3.5, [70, 188, 200], 0.62], [8, [38, 140, 172], 0.84], [16, [26, 92, 140], 0.95], [32, [16, 56, 102], 1]];
+  const stops = [[0, [226, 250, 242], 0.25], [1.2, [168, 236, 226], 0.45], [3.5, [104, 214, 214], 0.66], [8, [62, 186, 208], 0.86], [16, [44, 152, 198], 0.96], [32, [34, 120, 180], 1]];
   for (let k = 0; k < LUT_N; k++) {
     const d = k / LUT_STEP;
     let j = 0; while (j < stops.length - 2 && d > stops[j + 1][0]) j++;
@@ -101,15 +101,24 @@
         // caustics / shimmer
         const n1 = tA[((gx + o1) & 127) | (((gy) & 127) << 7)];
         const n2 = tB[((gx) & 127) | (((gy + o2) & 127) << 7)];
-        let c = 1 - Math.abs(n1 + n2); c = c * c * c * c;
+        let c = 1 - Math.abs(n1 + n2); c = c * c * c * c * c * c;
         const shallow = depth < 10 ? 1 - depth / 10 : 0;
-        const lift = c * (26 + 30 * shallow);
+        const lift = c * (10 + 16 * shallow) + n1 * 4;
         r += lift; g += lift; b += lift * 0.9;
-        // breaking wave crests moving toward shore
+        // gentle breaking crests moving toward the shore
         let foam = 0;
-        if (depth < 8) {
+        if (depth < 6) {
           const crest = Math.sin(depth * 1.05 + tc + ph[i] * 0.6);
-          if (crest > 0.78) foam = (crest - 0.78) * 4.5 * (1 - depth / 8) * (0.4 + 0.6 * ex[i]);
+          if (crest > 0.84) foam = (crest - 0.84) * 3.2 * (1 - depth / 6) * (0.3 + 0.7 * ex[i]);
+        }
+        // clean outline ripples that ring the island and drift slowly outward
+        if (depth > 0.8 && depth < 15) {
+          const q = depth * 0.34 - t * 0.12 + ph[i] * 0.03;
+          const tri = Math.abs(q - Math.floor(q) - 0.5) * 2;
+          if (tri > 0.8) {
+            const line = (tri - 0.8) * 5 * (1 - depth / 15) * 0.55;
+            if (line > foam) foam = line;
+          }
         }
         // edge foam
         if (depth < 1.6) {

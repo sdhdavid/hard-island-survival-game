@@ -117,8 +117,8 @@
     x.shadowBlur = 0;
     if (!day) { x.fillStyle = I.rgb(top); x.beginPath(); x.arc(px + 3, py - 2, 6, 0, I.TAU); x.fill(); }
     x.restore();
-    x.fillStyle = '#1b2a1e'; x.fillRect(0, H - 8, W, 8);
-    x.strokeStyle = 'rgba(255,255,255,.25)'; x.lineWidth = 1; x.beginPath(); x.arc(W / 2, H - 6, 78, Math.PI, 0); x.stroke();
+    x.fillStyle = '#8cc65e'; x.fillRect(0, H - 8, W, 8); x.fillStyle = '#c98a4f'; x.fillRect(0, H - 3, W, 3);
+    x.strokeStyle = 'rgba(120,85,45,.25)'; x.lineWidth = 1; x.beginPath(); x.arc(W / 2, H - 6, 78, Math.PI, 0); x.stroke();
   }
 
   // ---------------- inventory ----------------
