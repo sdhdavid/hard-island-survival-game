@@ -47,7 +47,19 @@
     I.title.show();
     if (I.audio.ready) I.audio.radio(false);
   };
+  // ---- full screen (phones: hide the address bar, lock to landscape) ----
+  const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const fsOK = () => !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+  const standalone = () => matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches || navigator.standalone;
+  M.fullscreen = function (on) {
+    const el = document.documentElement;
+    if (on && !fsEl()) {
+      const r = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : el.webkitRequestFullscreen();
+      Promise.resolve(r).then(() => { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); }).catch(() => {});
+    } else if (!on && fsEl()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
+  };
   function enterGame() {
+    if (document.body.classList.contains('touch') && fsOK() && !standalone()) M.fullscreen(true);
     I.audio.init();
     $('title').classList.add('hidden');
     I.title.hide();
@@ -70,6 +82,14 @@
   }
 
   function setupInput() {
+    if (fsOK() && !standalone()) $('btnFull').classList.remove('hidden');
+    $('btnFull').onclick = () => M.fullscreen(!fsEl());
+    const fsSync = () => { $('btnFull').classList.toggle('on', !!fsEl()); setTimeout(() => { I.render.resize(); I.title.resize(); }, 120); };
+    document.addEventListener('fullscreenchange', fsSync); document.addEventListener('webkitfullscreenchange', fsSync);
+    if (window.visualViewport) visualViewport.addEventListener('resize', () => { I.render.resize(); I.title.resize(); });
+    const iOS = /iPhone|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1 && !fsOK());
+    if (iOS && !standalone()) $('iosTip').classList.remove('hidden');
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
     $('bNew').onclick = M.startNew;
     $('bLoad').onclick = M.continueGame;
     $('bHelp').onclick = () => I.ui.openHelp(true);

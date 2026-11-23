@@ -63,7 +63,7 @@ R.init = function (cv) {
   scene.add(outside, caveS.group, actors.root);
   // 2D overlay for rain, vignette and fades
   fx = document.createElement('canvas');
-  fx.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1';
+  fx.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1';
   canvas.after(fx);
   fxc = fx.getContext('2d');
   R.resize();

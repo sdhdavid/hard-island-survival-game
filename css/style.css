@@ -18,8 +18,8 @@
   --ui: 'Heebo', 'Segoe UI', Arial, sans-serif;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; overflow: hidden; background: #0d1b26; color: var(--txt); font-family: var(--ui); user-select: none; -webkit-user-select: none; touch-action: none; }
-canvas#game, canvas#titleCv { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+html, body { margin: 0; height: 100%; height: 100dvh; overflow: hidden; background: #0d1b26; color: var(--txt); font-family: var(--ui); user-select: none; -webkit-user-select: none; touch-action: none; }
+canvas#game, canvas#titleCv { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; display: block; }
 canvas#titleCv { z-index: 5; }
 .hidden { display: none !important; }
 button { font-family: var(--ui); cursor: pointer; }
@@ -285,3 +285,21 @@ body.touch #thought { bottom: 180px; }
 
 .credit a { color: #fff; }
 #title .credit { margin-top: 4px; opacity: .85; }
+
+#title #iosTip { background: rgba(255,249,236,.92); color: #4a3523; text-shadow: none; padding: 6px 12px; border-radius: 12px; display: inline-block; }
+/* landscape phones: keep the HUD compact and clear of the notch */
+@media (max-height: 480px) {
+  #topR { top: max(8px, env(safe-area-inset-top)); right: max(10px, env(safe-area-inset-right)); }
+  #topL { top: 6px; left: max(10px, env(safe-area-inset-left)); transform: scale(.8); transform-origin: top left; }
+  .stat { width: 38px; height: 38px; } .stat .ico { inset: 9px; width: 20px; height: 20px; }
+  #objective { max-width: 230px; font-size: 12px; padding: 5px 10px; }
+  #tools { left: max(10px, env(safe-area-inset-left)); gap: 6px; }
+  .tbtn { width: 40px; height: 40px; }
+  body.touch #tools { flex-direction: row; top: max(8px, env(safe-area-inset-top)); bottom: auto; left: 112px; }
+  #thought { font-size: 15px; bottom: 76px; }
+  .slot { width: 42px; height: 42px; } .slot img { width: 32px; height: 32px; }
+  #inv { min-height: 54px; padding: 5px; }
+  #title .tinner { margin-top: 3vh; } #title h1 { font-size: 64px; } #title .sub { margin-bottom: 12px; }
+  #joy { width: 110px; height: 110px; bottom: 18px; left: max(18px, env(safe-area-inset-left)); }
+  #tA { bottom: 26px; right: max(24px, env(safe-area-inset-right)); } #tB { bottom: 76px; right: max(96px, env(safe-area-inset-right)); }
+}

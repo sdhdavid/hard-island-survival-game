@@ -8,6 +8,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Heebo:wght@300;400;500;700;800&family=Karantina:wght@400;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2f9cc8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="אחרי הסערה">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -41,6 +49,7 @@
     <button class="tbtn" id="btnNote" title="מחברת (N)"><span>N</span><svg viewBox="0 0 24 24"><path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6zM4 6h3M4 10h3M4 14h3M4 18h3"/></svg></button>
     <button class="tbtn" id="btnCraft" title="יצירה (C)"><span>C</span><svg viewBox="0 0 24 24"><path d="M14 4l6 6-3 3-6-6zM11 7 3 15v6h6l8-8"/></svg></button>
     <button class="tbtn" id="btnWait" title="לחכות — החזק T"><span>T</span><svg viewBox="0 0 24 24"><path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9s8 4 8 9"/></svg></button>
+    <button class="tbtn hidden" id="btnFull" title="מסך מלא"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
     <button class="tbtn" id="btnPause" title="תפריט (Esc)"><span>Esc</span><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
   <div id="hint" class="hidden">
@@ -68,6 +77,7 @@
       <button id="bHelp" class="link">איך משחקים?</button>
     </div>
     <p class="tiny">מומלץ עם אוזניות · המשחק נשמר כשנחים ליד מדורה</p>
+    <p class="tiny hidden" id="iosTip">באייפון, למסך מלא בלי שורת הכתובת: <b>שיתוף</b> ⬆︎ ← <b>הוספה למסך הבית</b>, ואז לפתוח מהאייקון</p>
     <p class="tiny credit">דגמים: Kenney · KayKit (CC0) · <a href="2d.html">גרסת דו־ממד</a></p>
   </div>
 </div>
